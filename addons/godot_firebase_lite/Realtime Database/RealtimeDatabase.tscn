@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cv7bu3ojkoend"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/Realtime Database/RealtimeDatabase.gd" id="1_d4rok"]
+
+[node name="RealtimeDatabase" type="Node"]
+script = ExtResource("1_d4rok")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

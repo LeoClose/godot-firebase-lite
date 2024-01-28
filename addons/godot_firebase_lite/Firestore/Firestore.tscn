@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpohjw2ient0j"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/Firestore/Firestore.gd" id="1_dvoy2"]
+
+[node name="Firestore" type="Node"]
+script = ExtResource("1_dvoy2")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

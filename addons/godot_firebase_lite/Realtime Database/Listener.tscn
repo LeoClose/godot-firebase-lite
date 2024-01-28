@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dq0kkiaqrhsdd"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/Realtime Database/HTTPSSEClient.gd" id="1_odv03"]
+
+[node name="Listener" type="Node"]
+script = ExtResource("1_odv03")

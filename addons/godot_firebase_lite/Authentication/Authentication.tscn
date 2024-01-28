@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckdlxybexamd5"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/Authentication/Authentication.gd" id="1_353o8"]
+
+[node name="Auth" type="Node"]
+script = ExtResource("1_353o8")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

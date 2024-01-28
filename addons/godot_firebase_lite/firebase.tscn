@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://0gme8m001s81"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/firebase.gd" id="1_k3uc1"]
+
+[node name="Firebase" type="Node"]
+script = ExtResource("1_k3uc1")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
