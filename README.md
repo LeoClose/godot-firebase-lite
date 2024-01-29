@@ -1,7 +1,7 @@
 A lightweight Firebase REST API Wrapper for Godot supporting Authentication, Firestore and Realtime Database
 
 # 📖 Documentation
-[Initialize Godot Firebase Lite](https://github.com/LeoClose/godot-firebase-lite/new/main/addons/godot_firebase_lite)
+[Initialize Godot Firebase Lite](https://github.com/LeoClose/godot-firebase-lite/blob/main/addons/godot_firebase_lite/Initialize.md)
 
 [Authentication](https://github.com/LeoClose/godot-firebase-lite/blob/main/addons/godot_firebase_lite/Authentication/Authentication.md)
 
