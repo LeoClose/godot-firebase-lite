@@ -1,13 +1,15 @@
 # Authentication with Godot Firebase Lite
 
-Values from all the functions are returned in an array [ERROR, receivedData] where **ERROR** is either 0 (OK) or an error that occured and **receivedData** is data received from your request
+> [!NOTE]
+> Values from all the functions are returned in an array [ERROR, receivedData] where **ERROR** is either 0 (OK) or an error that occured and **receivedData** is data received from your request
 
 ## Setting up your Firebase project to use Authentication
 Before starting, you have to set up Authentication in your Firebase project first and select login/signup options that you will provide (Anonymouse or Email/Password).
 You can do so under "Sign-in method" and "Add new provider"
 
 ## Login/Signup
-**When logged in, authToken is automatically caved to FirebaseLite.authToken and Authentication for other Firebase resources is automatic**
+> [!IMPORTANT]
+>**When logged in, authToken is automatically saved to FirebaseLite.authToken and Authentication for other Firebase resources is automatic**
 
 **Sign in anonymously**
 ```GDScript
@@ -57,8 +59,8 @@ FirebaseLite.Authentication.getUserData()
 
 ## Send E-mail Verification
 **Send e-mail verification to currently logged in user**
-
-**This requires the usage of [Confirm Email Verification](https://firebase.google.com/docs/reference/rest/auth#section-confirm-email-verification), which you will have to do with your website hosted on Firebase**
+> [!TIP]
+>**This requires the usage of [Confirm Email Verification](https://firebase.google.com/docs/reference/rest/auth#section-confirm-email-verification), which you will have to do with your website hosted on Firebase**
 ```GDScript
 FirebaseLite.Authentication.sendEmailVerification()
 ```
