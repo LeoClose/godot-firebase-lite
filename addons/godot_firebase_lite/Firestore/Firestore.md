@@ -7,22 +7,22 @@
 > [!CAUTION]
 > Usin write will create a new document if it doesn't exist yet or overwrite the existing one
 ```GDScript
-FirebaseLite.Authentication.write(path : String, data : Dictionary)
+FirebaseLite.Firestore.write(path : String, data : Dictionary)
 ```
 > [!TIP]
-> It should look like this: ```FirebaseLite.Authentication.write("collection/document", {"key": "value"})```
+> It should look like this: ```FirebaseLite.Firestore.write("collection/document", {"key": "value"})```
 
 ## Update
 ```GDScript
-FirebaseLite.Authentication.update(path : String, data : Dictionary)
+FirebaseLite.Firestore.update(path : String, data : Dictionary)
 ```
 
 ## Read
 ```GDScript
-FirebaseLite.Authentication.read(path : String)
+FirebaseLite.Firestore.read(path : String)
 ```
 
 ## Delete
 ```GDScript
-FirebaseLite.Authentication.delete(path : String)
+FirebaseLite.Firestore.delete(path : String)
 ```
