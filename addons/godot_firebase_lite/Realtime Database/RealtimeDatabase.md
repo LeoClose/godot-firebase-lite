@@ -5,7 +5,7 @@
 
 ## Write (Create)
 > [!CAUTION]
-> Usin write will create a new document if it doesn't exist yet or overwrite the existing one
+> Using write will create a new document if it doesn't exist yet or overwrite the existing one
 ```GDScript
 FirebaseLite.RealtimeDatabase.write(path : String, data : Dictionary)
 ```
