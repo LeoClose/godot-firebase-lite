@@ -78,7 +78,7 @@ FirebaseLite.Authentication.linkWithEmail(email : String, password : String)
 FirebaseLite.Authentication.deleteAccount()
 ```
 
-## Unlink Provided
+## Unlink Provider
 **Unlink providers listen in the array as a string from currently logged in users account from your Firebase project**
 
 **Available providers: ["anonymous", "email", "phone"]**
