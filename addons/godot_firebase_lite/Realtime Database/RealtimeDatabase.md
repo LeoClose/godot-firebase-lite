@@ -25,7 +25,7 @@ FirebaseLite.RealtimeDatabase.update(path : String, updateData : Dictionary)
 
 ## Read
 ```GDScript
-FirebaseLite.RealtimeDatabase.update(path : String)
+FirebaseLite.RealtimeDatabase.read(path : String)
 ```
 
 ## Delete
