@@ -2,15 +2,15 @@
 extends Node
 
 const firebaseConfig : Dictionary = {
-  "apiKey": "AIzaSyAtTsc0sKbGyq1LnePOpX_p3u9HnhH-xxo",
-  "authDomain": "godot-firebase-lite.firebaseapp.com",
-  "projectId": "godot-firebase-lite",
-  "databaseURL": "https://godot-firebase-lite-default-rtdb.europe-west1.firebasedatabase.app",
-  "storageBucket": "godot-firebase-lite.appspot.com",
-  "messagingSenderId": "940493254029",
-  "appId": "1:940493254029:web:9c36c466fc1e04d23721c4",
-  "measurementId": "G-655LJLZH32",
-  "googleAPIKey": "AIzaSyDn3gbE3pkTvD62hntM-X5qADcaDJs0evw", #AKA WebAPIKey, browserKey
+  "apiKey": "apiKey",
+  "authDomain": "projectId",
+  "projectId": "projectId",
+  "databaseURL": "datanaseUrl",
+  "storageBucket": "storageBucket",
+  "messagingSenderId": "messagingSenderId",
+  "appId": "appId",
+  "measurementId": "measurementId",
+  "googleAPIKey": "googleAPIKey", #AKA WebAPIKey, browserKey
 };
 
 #Firebase Apps References
