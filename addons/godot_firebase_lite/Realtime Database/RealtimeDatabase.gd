@@ -28,9 +28,9 @@ func processRequest(path, method, body = []):
 	else:
 		url = "%s/%s.json?auth=%s" % [FirebaseLite.firebaseConfig["databaseURL"], path, FirebaseLite.authToken]
 	if method == HTTPClient.METHOD_GET or method == HTTPClient.METHOD_DELETE:
-		databaseHttp.request(url, [], method)
+		await databaseHttp.request(url, [], method)
 	else:
-		databaseHttp.request(url, [], method, JSON.stringify(body))
+		await databaseHttp.request(url, [], method, JSON.stringify(body))
 	var data = await databaseHttp.request_completed
 	var decodedData = JSON.new().parse_string(str(data[3].get_string_from_utf8()))
 	if data[1] != 200: #Request for writing data was not approved

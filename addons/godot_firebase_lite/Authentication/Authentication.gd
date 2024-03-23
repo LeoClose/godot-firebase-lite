@@ -51,6 +51,7 @@ func processRequest(url, datats):
 	var data = await authHttp.request_completed
 	var decodedData = JSON.parse_string(data[3].get_string_from_utf8())
 	if data[1] == 400: #Response code: 400 | There was an error
+		print("Firebase Authentication Error: " + decodedData["error"]["message"])
 		return [ERR_CANT_CONNECT, decodedData]
 	elif data[1] == 200: #Response code: 200 | Request was succesful and data was received
 		if decodedData["kind"] == "identitytoolkit#SignupNewUserResponse":

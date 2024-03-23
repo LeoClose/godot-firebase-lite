@@ -2,15 +2,15 @@
 extends Node
 
 const firebaseConfig : Dictionary = {
-  "apiKey": "apiKey",
-  "authDomain": "projectId",
-  "projectId": "projectId",
-  "databaseURL": "datanaseUrl",
-  "storageBucket": "storageBucket",
-  "messagingSenderId": "messagingSenderId",
-  "appId": "appId",
-  "measurementId": "measurementId",
-  "googleAPIKey": "googleAPIKey", #AKA WebAPIKey, browserKey
+  "apiKey": "",
+  "authDomain": "",
+  "projectId": "",
+  "databaseURL": "",
+  "storageBucket": "",
+  "messagingSenderId": "",
+  "appId": "",
+  "measurementId": "",
+  "googleAPIKey": "", #AKA WebAPIKey, browserKey
 };
 
 #Firebase Apps References
@@ -20,6 +20,8 @@ var RealtimeDatabase : Node
 var Firestore : Node
 #Other
 var authToken = null
+const validApps = ["Realtime Database", "Authentication", "Firestore"]
+var temporaryApp
 
 #Signals
 signal firebaseInitialized
@@ -28,10 +30,11 @@ func initializeFirebase(FirebaseApps : Array, config : Dictionary = {}) -> void:
 	if config == {}:
 		config = firebaseConfig
 	if initialized == true: pass
-	var temporaryApp
 	for app in FirebaseApps:
+		if !(app in validApps):
+			return print(app + " is not a valid Firebase service")
 		match app:
-			"Authentication": 
+			"Authentication":
 				temporaryApp = load("res://addons/godot_firebase_lite/Authentication/Authentication.tscn").instantiate()
 			"Realtime Database":
 				temporaryApp = load("res://addons/godot_firebase_lite/Realtime Database/RealtimeDatabase.tscn").instantiate()
