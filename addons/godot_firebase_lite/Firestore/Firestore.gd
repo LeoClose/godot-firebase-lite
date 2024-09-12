@@ -1,22 +1,31 @@
 extends Node
+class_name Firestore
 
-@onready var databaseHttp : HTTPRequest = get_node("HTTPRequest")
+const operators = ["LESS_THAN", "LESS_THAN_OR_EQUAL", "GREATER_THAN",
+		"GREATER_THAN_OR_EQUAL", "EQUAL", "NOT_EQUAL", "ARRAY_CONTAINS",
+		"IN", "ARRAY_CONTAINS_ANY", "NOT_IN"]
 
-func write(path, data):
+func write(path: String, data):
 	path = path.trim_prefix("/").trim_suffix("/").replace(" ", "%20")
 	var collection = path.left(path.find("/"))
 	path = path.replace(collection+"/", "")
-	var str = "%s?documentId=%s" % [collection, path]
-	return await processRequest(str, HTTPClient.METHOD_POST, data)
+	var url = "%s?documentId=%s" % [collection, path]
+	return await processRequest(url, HTTPClient.METHOD_POST, data)
 
-func read(path):
+func read(path: String):
 	return await processRequest(path, HTTPClient.METHOD_GET)
 
-func update(path, data):
+func update(path: String, data):
 	return await processRequest(path, HTTPClient.METHOD_PATCH, data)
 
-func delete(path):
+func delete(path: String):
 	return await processRequest(path, HTTPClient.METHOD_DELETE)
+
+func query(collection: String, field: String, operator: String, values):
+	if operators.has(operator) == false:
+		printerr("Firebase (Firestore): Invalid query operator. Valid operators are: "+str(operators))
+	else:
+		return await processQuery(collection, field, operator, values)
 
 func firestore2godot(dict):
 	var result
@@ -75,13 +84,19 @@ func processDictionary(dict, type):
 				result[key] = firestore2godot(dict[key])
 	return result
 
-func processRequest(doc, method, body = []):
-	var url = "https://firestore.googleapis.com/v1/projects/%s/databases/(default)/documents/%s" % [FirebaseLite.firebaseConfig["projectId"], doc]
+func getHeaders():
 	var headers
 	if FirebaseLite.authToken == null:
 		headers = ["Content-Type: application/json"]
 	else:
 		headers = ["Content-Type: application/json", "Authorization: Bearer %s" % FirebaseLite.authToken]
+	return headers
+
+func processRequest(doc, method, body = []):
+	var databaseHttp = HTTPRequest.new()
+	add_child(databaseHttp)
+	var url = "https://firestore.googleapis.com/v1/projects/%s/databases/(default)/documents/%s" % [FirebaseLite.firebaseConfig["projectId"], doc]
+	var headers = getHeaders()
 	if method == HTTPClient.METHOD_GET or method == HTTPClient.METHOD_DELETE:
 		databaseHttp.request(url, headers, method)
 	else:
@@ -89,11 +104,48 @@ func processRequest(doc, method, body = []):
 		databaseHttp.request(url, headers, method, JSON.stringify({"fields": body}))
 	var data = await databaseHttp.request_completed
 	var decodedData = JSON.new().parse_string(str(data[3].get_string_from_utf8()))
+	databaseHttp.queue_free()
 	if data[1] != 200: #Request for writing data was not approved
 		printerr("Firebase Error (Firestore): there was an error with processing your request, received data: " + str(decodedData))
-		return [ERR_DATABASE_CANT_WRITE, decodedData]
+		return ERR_DATABASE_CANT_WRITE
 	else:
 		var result = null
 		if "fields" in decodedData.keys():
 			result = await processDictionary(decodedData["fields"], 1)
-		return [OK, result]
+		return result
+
+func processQuery(collection, field, op, values):
+	var databaseHttp = HTTPRequest.new()
+	add_child(databaseHttp)
+	var url = "https://firestore.googleapis.com/v1/projects/%s/databases/(default)/documents:runQuery" % [FirebaseLite.firebaseConfig["projectId"]]
+	var headers = getHeaders()
+	var body = {"structuredQuery": {
+		"from": [{
+			"collectionId": "%s" % collection,
+			"allDescendants": true
+		}],
+		"where": {
+			"fieldFilter": {
+				"field": {
+					"fieldPath": "%s" % field
+				},
+				"op": "%s" % op,
+				"value": godot2firestore(values)
+			}
+		}
+	}}
+	databaseHttp.request(url, headers, HTTPClient.METHOD_POST, JSON.stringify(body))
+	var data = await databaseHttp.request_completed
+	var decodedData = JSON.new().parse_string(str(data[3].get_string_from_utf8()))
+	databaseHttp.queue_free()
+	if data[1] != 200: #Request for reading data was not approved
+		printerr("Firebase Error (Firestore): "+decodedData[0]["error"]["message"])
+		return ERR_DATABASE_CANT_WRITE
+	else:
+		var result : Array
+		for document in decodedData:
+			result.append({"document": document["document"]["name"].replace("projects/%s/databases/(default)/documents/%s/" % [FirebaseLite.firebaseConfig["projectId"], collection], ""), "fields": document["document"]["fields"]})
+		for x in len(result):
+			for fields in result[x]["fields"]:
+				result[x]["fields"][fields] = firestore2godot(result[x]["fields"][fields])
+		return result

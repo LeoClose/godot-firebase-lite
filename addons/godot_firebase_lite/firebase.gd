@@ -1,55 +1,46 @@
 @tool
 extends Node
 
-const firebaseConfig : Dictionary = {
-  "apiKey": "",
-  "authDomain": "",
-  "projectId": "",
-  "databaseURL": "",
-  "storageBucket": "",
-  "messagingSenderId": "",
-  "appId": "",
-  "measurementId": "",
-  "googleAPIKey": "", #AKA WebAPIKey, browserKey
-};
-
 #Firebase Apps References
-var initialized = false
-var Authentication : Node
-var RealtimeDatabase : Node
-var Firestore : Node
+var Authentication : Authentication
+var RealtimeDatabase : RealtimeDatabase
+var Firestore : Firestore
+var Storage : Storage
 #Other
 var authToken = null
-const validApps = ["Realtime Database", "Authentication", "Firestore"]
-var temporaryApp
+#Firebase config
+var firebaseConfig : Dictionary
 
-#Signals
-signal firebaseInitialized
+func initialize(config : Dictionary):
+	if config.is_empty():
+		printerr("Firebase (Initializing): Insufficient firebase configuration")
+		return ERR_CANT_CREATE
+	else:
+		firebaseConfig = config
+	Authentication = load("res://addons/godot_firebase_lite/Authentication/Authentication.tscn").instantiate()
+	RealtimeDatabase = load("res://addons/godot_firebase_lite/Realtime Database/RealtimeDatabase.tscn").instantiate()
+	Firestore = load("res://addons/godot_firebase_lite/Firestore/Firestore.tscn").instantiate()
+	Storage = load("res://addons/godot_firebase_lite/Storage/Storage.tscn").instantiate()
+	add_child(Authentication)
+	add_child(RealtimeDatabase)
+	add_child(Firestore)
+	add_child(Storage)
+	return OK
 
-func initializeFirebase(FirebaseApps : Array, config : Dictionary = {}) -> void:
-	if config == {}:
-		config = firebaseConfig
-	if initialized == true: pass
-	for app in FirebaseApps:
-		if !(app in validApps):
-			return print(app + " is not a valid Firebase service")
-		match app:
-			"Authentication":
-				temporaryApp = load("res://addons/godot_firebase_lite/Authentication/Authentication.tscn").instantiate()
-			"Realtime Database":
-				temporaryApp = load("res://addons/godot_firebase_lite/Realtime Database/RealtimeDatabase.tscn").instantiate()
-			"Firestore":
-				temporaryApp = load("res://addons/godot_firebase_lite/Firestore/Firestore.tscn").instantiate()
-		temporaryApp.name = app
-		self.add_child(temporaryApp)
-		match app:
-			"Authentication":
-				Authentication = get_node(str(temporaryApp.name))
-			"Realtime Database":
-				RealtimeDatabase = get_node(str(temporaryApp.name))
-			"Firestore":
-				Firestore = get_node(str(temporaryApp.name))
-	initialized = true
+func terminate(app: String):
+	match app:
+		"Authentication":
+			Authentication.queue_free()
+		"Realtime Database":
+			RealtimeDatabase.queue_free()
+		"Firestore":
+			Firestore.queue_free()
+		"Storage":
+			Storage.queue_free()
+		_:
+			printerr("Firebase (Initializing): %s doesn't exist" % app)
+			return ERR_CANT_RESOLVE
+	return OK
 
 func terminateFirestore() -> void:
 	self.queue_free()

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb4w5a54e03gw"]
+
+[ext_resource type="Script" path="res://addons/godot_firebase_lite/Storage/Storage.gd" id="1_fa0l4"]
+
+[node name="Storage" type="Node"]
+script = ExtResource("1_fa0l4")

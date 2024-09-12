@@ -4,5 +4,3 @@
 
 [node name="RealtimeDatabase" type="Node"]
 script = ExtResource("1_d4rok")
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]

@@ -4,5 +4,3 @@
 
 [node name="Auth" type="Node"]
 script = ExtResource("1_353o8")
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
