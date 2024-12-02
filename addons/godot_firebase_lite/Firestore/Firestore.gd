@@ -5,7 +5,7 @@ const operators = ["LESS_THAN", "LESS_THAN_OR_EQUAL", "GREATER_THAN",
 		"GREATER_THAN_OR_EQUAL", "EQUAL", "NOT_EQUAL", "ARRAY_CONTAINS",
 		"IN", "ARRAY_CONTAINS_ANY", "NOT_IN"]
 
-func write(path: String, data):
+func write(path: String, data : Dictionary):
 	path = path.trim_prefix("/").trim_suffix("/").replace(" ", "%20")
 	var collection = path.left(path.find("/"))
 	path = path.replace(collection+"/", "")
@@ -15,7 +15,7 @@ func write(path: String, data):
 func read(path: String):
 	return await processRequest(path, HTTPClient.METHOD_GET)
 
-func update(path: String, data):
+func update(path: String, data : Dictionary):
 	return await processRequest(path, HTTPClient.METHOD_PATCH, data)
 
 func delete(path: String):
@@ -79,9 +79,10 @@ func processDictionary(dict, type):
 				if typeof(dict[key]) == TYPE_DICTIONARY or typeof(dict[key]) == TYPE_ARRAY:
 					result[key] = godot2firestore(dict[key])
 				else:
-					result[key] = godot2firestore(key)
+					result[key] = godot2firestore(dict[key])
 			1:
 				result[key] = firestore2godot(dict[key])
+				
 	return result
 
 func getHeaders():
@@ -143,6 +144,8 @@ func processQuery(collection, field, op, values):
 		return ERR_DATABASE_CANT_WRITE
 	else:
 		var result : Array
+		if !decodedData[0].size() > 1:
+			return []
 		for document in decodedData:
 			result.append({"document": document["document"]["name"].replace("projects/%s/databases/(default)/documents/%s/" % [FirebaseLite.firebaseConfig["projectId"], collection], ""), "fields": document["document"]["fields"]})
 		for x in len(result):

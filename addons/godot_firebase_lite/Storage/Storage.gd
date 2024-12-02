@@ -61,13 +61,14 @@ func addMeta(path: String, meta: Dictionary):
 	databaseHttp.queue_free()
 	return decodedData
 
-func query(path: String, meta: Array):
+func list():
 	var databaseHttp = HTTPRequest.new()
 	add_child(databaseHttp)
-	databaseHttp.request(get_url(path, "fields=id,name,metadata"), ["Authorization: Bearer %s" % FirebaseLite.authToken, "Content-Type: application/json"], HTTPClient.METHOD_GET)
+	databaseHttp.request(get_url("", "fields=id,name,metadata"), ["Authorization: Bearer %s" % FirebaseLite.authToken, "Content-Type: application/json"], HTTPClient.METHOD_GET)
 	var data = await databaseHttp.request_completed
 	var decodedData = (str(data[3].get_string_from_utf8()))
 	databaseHttp.queue_free()
+	decodedData = JSON.new().parse_string(decodedData)
 	return decodedData
 
 func get_url(path: String, parameter: String):
